@@ -31,10 +31,10 @@ const PARTIAL_TERM = "सायबर";
 /** A query matching nothing. */
 const ABSENT_TERM = "क्रिकेट";
 const DEEP_LINK_SLUG = "msme-samanjasya-karar-chakan-bhosari";
-/** An article with `articlePdfUrl: null`. */
-const NO_PDF_SLUG = "nepal-adaklele-paryatak-nanded-madat";
+/** An article with `articlePdfUrl: null`, or null while every article has one. */
+const NO_PDF_SLUG = null;
 /** An article with a PDF, or null while no article links one. */
-const PDF_SLUG = null;
+const PDF_SLUG = "msme-samanjasya-karar-chakan-bhosari";
 /** An article with `posterImageUrl: null`, or null while all ship a poster. */
 const NO_POSTER_SLUG = null;
 /** A sentence from the newest article, which share mode selects first. */
@@ -276,15 +276,34 @@ if (NO_POSTER_SLUG) {
 }
 
 // The article without a PDF shows the unavailable state, not a dead button.
-await page.goto(`${BASE}/?article=${NO_PDF_SLUG}`, {
-  waitUntil: "networkidle",
-});
-await page.waitForTimeout(600);
-check(
-  "missing PDF renders an explanation, not a button",
-  (await page.getByText("या बातमीसाठी PDF सध्या उपलब्ध नाही").count()) > 0 &&
-    (await page.getByRole("link", { name: /संपूर्ण लेख \(PDF\)/ }).count()) === 0,
-);
+if (NO_PDF_SLUG) {
+  await page.goto(`${BASE}/?article=${NO_PDF_SLUG}`, {
+    waitUntil: "networkidle",
+  });
+  await page.waitForTimeout(600);
+  check(
+    "missing PDF renders an explanation, not a button",
+    (await page.getByText("या बातमीसाठी PDF सध्या उपलब्ध नाही").count()) > 0 &&
+      (await page.getByRole("link", { name: /संपूर्ण लेख \(PDF\)/ }).count()) === 0,
+  );
+} else {
+  skip(
+    "missing PDF renders an explanation, not a button",
+    "every article links a PDF",
+  );
+}
+
+// The linked PDF is really served — a 404 here is invisible in the UI.
+if (PDF_SLUG) {
+  const pdf = await page.request.get(`${BASE}/pdfs/${PDF_SLUG}.pdf`);
+  check(
+    "the linked PDF is served",
+    pdf.ok() && (pdf.headers()["content-type"] ?? "").includes("application/pdf"),
+    `${pdf.status()} ${pdf.headers()["content-type"] ?? ""}`,
+  );
+} else {
+  skip("the linked PDF is served", "no article links a PDF yet");
+}
 
 /* -- share mode ----------------------------------------------------------- */
 
@@ -339,7 +358,7 @@ fs.writeFileSync(`${OUT}/share-message.txt`, message, "utf8");
 
 check("message names both articles", message.split("दिनांक:").length - 1 === 2);
 if (PDF_SLUG) {
-  check("message carries absolute PDF URLs", message.includes(`${BASE}/pdf/`));
+  check("message carries absolute PDF URLs", message.includes(`${BASE}/pdfs/`));
 } else {
   check(
     "message states the PDF is unavailable",

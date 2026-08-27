@@ -3,14 +3,15 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev -p 3001",
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
     "typecheck": "next typegen && tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
-    "gen:posters": "node scripts/generate-posters.mjs"
+    "gen:posters": "node scripts/generate-posters.mjs",
+    "gen:pdfs": "node scripts/generate-pdfs.mjs"
   },
   "dependencies": {
     "clsx": "^2.1.1",

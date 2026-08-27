@@ -1,0 +1,164 @@
+/**
+ * Print sheet for the full-article PDFs.
+ *
+ * This stylesheet is the page geometry: `npm run gen:pdfs` prints these routes
+ * with `preferCSSPageSize`, so the `@page` block below — not the script — owns
+ * the paper size and margins. Everything here is plain CSS rather than utility
+ * classes because `@page` has no utility equivalent, and keeping the whole
+ * sheet in one file makes the printed result readable in isolation.
+ */
+
+@page {
+  size: A4;
+  margin: 16mm 15mm 18mm;
+}
+
+/* The root layout paints warm paper on `body`. A printed sheet wants plain
+   white edge to edge, and the sheet is taller than its content on the last
+   page — so the override has to reach `body`, not just the article. `:has`
+   keeps it scoped to this route without a second layout file, and outranks
+   the utility class the layout sets. */
+body:has(.print-page) {
+  background: #ffffff;
+}
+
+.print-page {
+  background: #ffffff;
+  color: #17130e;
+  font-family: var(--font-noto-devanagari), "Noto Sans Devanagari",
+    "Nirmala UI", system-ui, sans-serif;
+  margin: 0 auto;
+  /* Matches A4 minus the @page margins, so the screen preview at
+     /print/<slug> shows the same line breaks the PDF gets. */
+  max-width: 180mm;
+  padding: 10mm 0 0;
+}
+
+.print-masthead {
+  border-bottom: 2px solid #c05f1c;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding-bottom: 8px;
+}
+
+.print-masthead-title {
+  font-family: var(--font-tiro-marathi), "Tiro Devanagari Marathi",
+    "Noto Serif Devanagari", Georgia, serif;
+  font-size: 15pt;
+  line-height: 1.3;
+}
+
+.print-masthead-source {
+  color: #857868;
+  font-size: 8.5pt;
+  text-align: right;
+}
+
+.print-eyebrow {
+  color: #98470f;
+  font-size: 8.5pt;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  margin-top: 14px;
+  text-transform: uppercase;
+}
+
+.print-title {
+  font-family: var(--font-tiro-marathi), "Tiro Devanagari Marathi",
+    "Noto Serif Devanagari", Georgia, serif;
+  font-size: 19pt;
+  line-height: 1.42;
+  margin-top: 6px;
+}
+
+.print-dateline {
+  color: #4a4139;
+  font-size: 9.5pt;
+  margin-top: 8px;
+}
+
+.print-poster {
+  border: 1px solid #e6dccc;
+  border-radius: 4px;
+  display: block;
+  margin: 12mm auto 0;
+  max-height: 95mm;
+  max-width: 78%;
+  object-fit: contain;
+}
+
+.print-rule {
+  background: #e6dccc;
+  border: 0;
+  height: 1px;
+  margin: 10mm 0 8mm;
+}
+
+.print-body p {
+  font-size: 11pt;
+  line-height: 1.85;
+  margin-bottom: 5mm;
+  text-align: justify;
+}
+
+.print-meta {
+  border-top: 1px solid #e6dccc;
+  display: grid;
+  gap: 3mm 10mm;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-top: 8mm;
+  padding-top: 6mm;
+}
+
+.print-meta dt {
+  color: #857868;
+  font-size: 8pt;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.print-meta dd {
+  font-size: 10pt;
+  margin-top: 1mm;
+}
+
+.print-tags {
+  color: #4a4139;
+  font-size: 9.5pt;
+  margin-top: 6mm;
+}
+
+.print-footer {
+  border-top: 1px solid #e6dccc;
+  color: #857868;
+  font-size: 8.5pt;
+  line-height: 1.6;
+  margin-top: 10mm;
+  padding-top: 4mm;
+}
+
+/* Keep headings and their first lines together across a page break. */
+.print-title,
+.print-dateline,
+.print-eyebrow {
+  break-after: avoid;
+}
+
+.print-body p {
+  orphans: 3;
+  widows: 3;
+}
+
+.print-meta,
+.print-footer {
+  break-inside: avoid;
+}
+
+@media print {
+  .print-page {
+    max-width: none;
+    padding-top: 0;
+  }
+}

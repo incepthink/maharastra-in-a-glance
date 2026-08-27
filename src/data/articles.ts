@@ -92,7 +92,7 @@ export const ARTICLES: Article[] = [
     date: "2026-08-26",
     summary:
       "नेपाळमधील रसुवा जिल्ह्यात भोटे कोशी नदीच्या पूरस्थितीमुळे अडकलेल्या नांदेड जिल्ह्यातील पर्यटकांनी किंवा त्यांच्या नातेवाईकांनी जिल्हा आपत्कालीन कार्यकेंद्राशी तात्काळ संपर्क साधण्याचे आवाहन करण्यात आले आहे. संपर्क करताना पर्यटकाचे नाव, मोबाईल क्रमांक, नेपाळमधील सध्याचे ठिकाण, प्रवासाचा तपशील आणि कुटुंबीयांचा संपर्क क्रमांक द्यावा. मदतीसाठी 02462-235077 आणि 1077 हे क्रमांक उपलब्ध आहेत.",
-    posterImageUrl: "/posters/nepal-adaklele-paryatak-nanded-madat.svg",
+    posterImageUrl: "/posters/nepal-adaklele-paryatak-nanded-madat.jpg",
     articlePdfUrl: "/pdfs/nepal-adaklele-paryatak-nanded-madat.pdf",
     category: "आपत्ती व्यवस्थापन",
     district: "नांदेड",

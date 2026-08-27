@@ -28,8 +28,9 @@ const postersDir = path.join(root, "public", "posters");
  * much past ~16 Devanagari characters overruns the 1200px frame.
  */
 const POSTERS = [
-  // `msme-samanjasya-karar-chakan-bhosari` is not listed: the released DGIPR
-  // poster for that article ships as `public/posters/<slug>.jpg`, so there is
+  // `msme-samanjasya-karar-chakan-bhosari` and
+  // `nepal-adaklele-paryatak-nanded-madat` are not listed: the released DGIPR
+  // posters for those articles ship as `public/posters/<slug>.jpg`, so there is
   // no typographic stand-in to generate.
   {
     slug: "digital-arrest-cyber-jagruti-1930",
@@ -38,14 +39,6 @@ const POSTERS = [
     place: "मुंबई",
     date: "२६ ऑगस्ट २०२६",
     hue: { base: "#2C6E8A", deep: "#1A4A5E", wash: "#E9F1F5" },
-  },
-  {
-    slug: "nepal-adaklele-paryatak-nanded-madat",
-    kicker: "आपत्ती व्यवस्थापन",
-    title: "नेपाळमध्ये\nअडकलेल्यांसाठी\nमदत कक्ष",
-    place: "नांदेड",
-    date: "२६ ऑगस्ट २०२६",
-    hue: { base: "#B03A3A", deep: "#7A2323", wash: "#FBECEA" },
   },
   {
     slug: "haffkine-karmchari-pralambit-magnya",

@@ -35,6 +35,8 @@ const DEEP_LINK_SLUG = "msme-samanjasya-karar-chakan-bhosari";
 const NO_PDF_SLUG = null;
 /** An article with a PDF, or null while no article links one. */
 const PDF_SLUG = "msme-samanjasya-karar-chakan-bhosari";
+/** An article with an editable DOCX, or null while no article links one. */
+const DOCX_SLUG = "msme-samanjasya-karar-chakan-bhosari";
 /** An article with `posterImageUrl: null`, or null while all ship a poster. */
 const NO_POSTER_SLUG = null;
 /** A sentence from the newest article, which share mode selects first. */
@@ -233,6 +235,21 @@ if (PDF_SLUG) {
   skip("dialog exposes the PDF action", "no article links a PDF yet");
 }
 
+if (DOCX_SLUG) {
+  await page.goto(`${BASE}/?article=${DOCX_SLUG}`, { waitUntil: "networkidle" });
+  await page.waitForTimeout(600);
+  check(
+    "dialog exposes the DOCX action",
+    await page
+      .getByRole("link", { name: /संपादनयोग्य प्रत \(DOCX\)/ })
+      .isVisible(),
+  );
+  await page.goBack();
+  await page.waitForTimeout(300);
+} else {
+  skip("dialog exposes the DOCX action", "no article links a DOCX yet");
+}
+
 await page.goBack();
 await page
   .getByRole("dialog")
@@ -305,6 +322,19 @@ if (PDF_SLUG) {
   skip("the linked PDF is served", "no article links a PDF yet");
 }
 
+// Same for the DOCX: the browser only reveals a bad link once it downloads.
+if (DOCX_SLUG) {
+  const docx = await page.request.get(`${BASE}/docs/${DOCX_SLUG}.docx`);
+  check(
+    "the linked DOCX is served",
+    docx.ok() &&
+      (docx.headers()["content-type"] ?? "").includes("wordprocessingml"),
+    `${docx.status()} ${docx.headers()["content-type"] ?? ""}`,
+  );
+} else {
+  skip("the linked DOCX is served", "no article links a DOCX yet");
+}
+
 /* -- share mode ----------------------------------------------------------- */
 
 await page.goto(BASE, { waitUntil: "networkidle" });
@@ -364,6 +394,9 @@ if (PDF_SLUG) {
     "message states the PDF is unavailable",
     message.includes("संपूर्ण लेख (PDF): सध्या उपलब्ध नाही"),
   );
+}
+if (DOCX_SLUG) {
+  check("message carries absolute DOCX URLs", message.includes(`${BASE}/docs/`));
 }
 check("message uses the rule separator", message.includes("────────────────────"));
 check(

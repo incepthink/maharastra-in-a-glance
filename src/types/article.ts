@@ -19,6 +19,12 @@ export type Article = {
   /** Full AI-generated summary. Shared verbatim — never truncated. */
   summary: string;
   /**
+   * The complete press release, paragraphs separated by blank lines. This —
+   * not `summary` — is what the printable sheet, the PDF and the DOCX carry,
+   * so a downloaded article is the whole text rather than a condensation.
+   */
+  body: string;
+  /**
    * Poster artwork. Local path or absolute URL.
    * `null` / a failing URL both fall back to a generated poster.
    */
@@ -29,6 +35,11 @@ export type Article = {
    * `null` renders the "PDF unavailable" state instead of a dead button.
    */
   articlePdfUrl: string | null;
+  /**
+   * Editable Word version of the same full article, resolved exactly like
+   * `articlePdfUrl`. `null` hides the DOCX link instead of offering a dead one.
+   */
+  articleDocxUrl: string | null;
   category: string;
   district: string;
   /** Publication / department credited for the original article. */

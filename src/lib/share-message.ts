@@ -9,6 +9,8 @@ import type { Article } from "@/types/article";
  *  - summaries are reproduced verbatim, never shortened;
  *  - no emoji or emoji-like symbols, only plain text and rule separators;
  *  - PDF links are absolute, so the message is useful outside the site.
+ *  - the editable DOCX is offered on its own line when the article has one;
+ *    a missing DOCX adds no line at all, so messages stay as short as before.
  */
 
 /** Horizontal rule between articles. Box-drawing, not an emoji. */
@@ -18,11 +20,12 @@ const HEADING = "महाराष्ट्र एका नजरेत";
 const SUBHEADING = "निवडक बातम्यांचा सारांश";
 const PDF_LABEL = "संपूर्ण लेख (PDF):";
 const PDF_MISSING = "संपूर्ण लेख (PDF): सध्या उपलब्ध नाही";
+const DOCX_LABEL = "संपादनयोग्य प्रत (DOCX):";
 const DATE_LABEL = "दिनांक:";
 
 export type ShareMessageOptions = {
   /**
-   * Origin used to absolutise site-relative PDF paths, e.g.
+   * Origin used to absolutise site-relative PDF and DOCX paths, e.g.
    * `https://example.org`. Omit only when every URL is already absolute.
    */
   origin?: string;
@@ -32,7 +35,7 @@ export type ShareMessageOptions = {
 
 const FOOTER = "हा सारांश महाराष्ट्र एका नजरेत या संकेतस्थळावरून पाठवला आहे.";
 
-/** Turn a stored PDF path into something that works in any messaging app. */
+/** Turn a stored file path into something that works in any messaging app. */
 export function resolveAbsoluteUrl(
   url: string | null,
   origin?: string,
@@ -55,6 +58,7 @@ export function buildArticleBlock(
   options: ShareMessageOptions = {},
 ): string {
   const pdfUrl = resolveAbsoluteUrl(article.articlePdfUrl, options.origin);
+  const docxUrl = resolveAbsoluteUrl(article.articleDocxUrl, options.origin);
 
   const lines = [
     article.title.trim(),
@@ -64,6 +68,7 @@ export function buildArticleBlock(
     article.summary.trim(),
     "",
     pdfUrl ? `${PDF_LABEL}\n${pdfUrl}` : PDF_MISSING,
+    ...(docxUrl ? [`${DOCX_LABEL}\n${docxUrl}`] : []),
   ];
 
   return lines.join("\n");

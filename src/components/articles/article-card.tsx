@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, useReducedMotion } from "motion/react";
-import { Check, FileText, MapPin, Star } from "lucide-react";
+import { Check, FileDown, FileText, MapPin, Star } from "lucide-react";
 import { cn } from "@/lib/cn";
 import { formatMarathiDate } from "@/lib/date";
 import { summaryExcerpt } from "@/lib/search";
@@ -205,6 +205,12 @@ function TagRow({ article, query }: { article: Article; query: string }) {
   );
 }
 
+/** Shared by the PDF and DOCX segments of the action row. */
+const FILE_ACTION =
+  "flex min-h-12 shrink-0 items-center justify-center gap-1.5 px-4 " +
+  "text-[0.875rem] font-medium text-ink-soft transition-colors " +
+  "hover:bg-paper-2 hover:text-ink active:bg-paper-3";
+
 function CardActions({
   article,
   onOpen,
@@ -229,7 +235,7 @@ function CardActions({
           href={article.articlePdfUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex min-h-12 shrink-0 items-center justify-center gap-1.5 px-5 text-[0.875rem] font-medium text-ink-soft transition-colors hover:bg-paper-2 hover:text-ink active:bg-paper-3"
+          className={FILE_ACTION}
           aria-label={t.openPdfOf(article.title)}
         >
           <FileText className="size-4" strokeWidth={2} aria-hidden="true" />
@@ -237,12 +243,29 @@ function CardActions({
         </a>
       ) : (
         <span
-          className="flex min-h-12 shrink-0 items-center justify-center gap-1.5 px-5 text-[0.875rem] text-ink-faint"
+          className="flex min-h-12 shrink-0 items-center justify-center gap-1.5 px-4 text-[0.875rem] text-ink-faint"
           title={t.pdfUnavailable}
         >
           <FileText className="size-4" strokeWidth={2} aria-hidden="true" />
           {t.pdfUnavailableShort}
         </span>
+      )}
+
+      {/* The editable copy is an extra, not a fallback: an article without one
+          keeps the PDF segment rather than showing a second dead state. */}
+      {article.articleDocxUrl && (
+        <>
+          <span aria-hidden="true" className="w-px bg-line-soft" />
+          <a
+            href={article.articleDocxUrl}
+            download
+            className={FILE_ACTION}
+            aria-label={t.openDocxOf(article.title)}
+          >
+            <FileDown className="size-4" strokeWidth={2} aria-hidden="true" />
+            {t.docx}
+          </a>
+        </>
       )}
     </div>
   );

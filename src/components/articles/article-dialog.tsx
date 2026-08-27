@@ -4,6 +4,7 @@ import {
   Building2,
   Expand,
   ExternalLink,
+  FileDown,
   FileText,
   MapPin,
   Star,
@@ -134,7 +135,7 @@ export function ArticleDialog({
               </div>
             </div>
 
-            <PdfFooter article={article} />
+            <DownloadFooter article={article} />
           </>
         )}
       </Overlay>
@@ -244,35 +245,62 @@ function TagList({ article }: { article: Article }) {
   );
 }
 
-function PdfFooter({ article }: { article: Article }) {
+/**
+ * The full-article downloads: the PDF as the primary action, and — when the
+ * article ships one — the editable DOCX beside it. The DOCX sits second
+ * because most readers want to read, not edit; it stacks under the PDF on
+ * narrow phones so neither label has to truncate.
+ */
+function DownloadFooter({ article }: { article: Article }) {
   return (
     <div className="shrink-0 border-t border-line bg-card px-4 pb-[calc(var(--safe-bottom)+0.75rem)] pt-3 md:px-6 md:pb-4">
-      {article.articlePdfUrl ? (
-        <a
-          href={article.articlePdfUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className={cn(
-            "flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-saffron px-5",
-            "text-[0.9375rem] font-semibold text-white shadow-card",
-            "transition-colors hover:bg-saffron-deep active:scale-[0.99]",
-          )}
-        >
-          <FileText className="size-4.5" strokeWidth={2} aria-hidden="true" />
-          {t.openPdf}
-          <ExternalLink
-            className="size-3.5 opacity-70"
-            strokeWidth={2}
-            aria-hidden="true"
-          />
-          <span className="sr-only">({t.pdfOpensNewTab})</span>
-        </a>
-      ) : (
-        <p className="flex min-h-12 items-center justify-center gap-2 rounded-xl border border-dashed border-line-strong px-5 text-[0.875rem] text-ink-mute">
-          <FileText className="size-4" strokeWidth={2} aria-hidden="true" />
-          {t.pdfUnavailable}
-        </p>
-      )}
+      <div className="flex flex-col gap-2 sm:flex-row">
+        {article.articlePdfUrl ? (
+          <a
+            href={article.articlePdfUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={cn(
+              "flex min-h-12 w-full flex-1 items-center justify-center gap-2 rounded-xl bg-saffron px-5",
+              "text-[0.9375rem] font-semibold text-white shadow-card",
+              "transition-colors hover:bg-saffron-deep active:scale-[0.99]",
+            )}
+          >
+            <FileText className="size-4.5" strokeWidth={2} aria-hidden="true" />
+            {t.openPdf}
+            <ExternalLink
+              className="size-3.5 opacity-70"
+              strokeWidth={2}
+              aria-hidden="true"
+            />
+            <span className="sr-only">({t.pdfOpensNewTab})</span>
+          </a>
+        ) : (
+          <p className="flex min-h-12 flex-1 items-center justify-center gap-2 rounded-xl border border-dashed border-line-strong px-5 text-[0.875rem] text-ink-mute">
+            <FileText className="size-4" strokeWidth={2} aria-hidden="true" />
+            {t.pdfUnavailable}
+          </p>
+        )}
+
+        {article.articleDocxUrl && (
+          <a
+            href={article.articleDocxUrl}
+            download
+            className={cn(
+              "flex min-h-12 w-full items-center justify-center gap-2 rounded-xl border border-line-strong px-5",
+              "text-[0.9375rem] font-semibold text-ink-soft",
+              "transition-colors hover:bg-paper-2 hover:text-ink active:scale-[0.99]",
+              "sm:w-auto sm:shrink-0",
+            )}
+          >
+            <FileDown className="size-4.5" strokeWidth={2} aria-hidden="true" />
+            {t.docx}
+            <span className="sr-only">
+              {t.openDocx} ({t.docxDownloads})
+            </span>
+          </a>
+        )}
+      </div>
     </div>
   );
 }

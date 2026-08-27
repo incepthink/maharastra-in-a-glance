@@ -63,6 +63,11 @@ export const t = {
   pdfUnavailable: "या बातमीसाठी PDF सध्या उपलब्ध नाही",
   pdfUnavailableShort: "PDF नाही",
   pdfOpensNewTab: "नवीन टॅबमध्ये उघडेल",
+  docx: "DOCX",
+  openDocx: "संपादनयोग्य प्रत (DOCX)",
+  openDocxOf: (title: string) =>
+    `${title} — संपूर्ण लेख DOCX मध्ये डाउनलोड करा`,
+  docxDownloads: "फाइल डाउनलोड होईल",
   moreTags: (count: number) => `+${toDevanagariDigits(count)} आणखी`,
 
   /* -- Counts ----------------------------------------------------------- */

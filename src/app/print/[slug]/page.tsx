@@ -47,7 +47,7 @@ export default async function PrintArticlePage({
   const article = articles.find((item) => item.slug === slug);
   if (!article) notFound();
 
-  const paragraphs = article.summary
+  const paragraphs = article.body
     .split(/\n\s*\n/)
     .map((paragraph) => paragraph.trim())
     .filter(Boolean);

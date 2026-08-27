@@ -28,34 +28,10 @@ const postersDir = path.join(root, "public", "posters");
  * much past ~16 Devanagari characters overruns the 1200px frame.
  */
 const POSTERS = [
-  // `msme-samanjasya-karar-chakan-bhosari` and
-  // `nepal-adaklele-paryatak-nanded-madat` are not listed: the released DGIPR
-  // posters for those articles ship as `public/posters/<slug>.jpg`, so there is
-  // no typographic stand-in to generate.
-  {
-    slug: "digital-arrest-cyber-jagruti-1930",
-    kicker: "गृह व सुरक्षा",
-    title: "डिजिटल अरेस्ट\nविरोधात जनजागृती",
-    place: "मुंबई",
-    date: "२६ ऑगस्ट २०२६",
-    hue: { base: "#2C6E8A", deep: "#1A4A5E", wash: "#E9F1F5" },
-  },
-  {
-    slug: "haffkine-karmchari-pralambit-magnya",
-    kicker: "प्रशासन",
-    title: "हाफकिन कर्मचारी\nमागण्यांवर चर्चा",
-    place: "मुंबई",
-    date: "२६ ऑगस्ट २०२६",
-    hue: { base: "#1F6B45", deep: "#144A2F", wash: "#E8F3EC" },
-  },
-  {
-    slug: "rajyapal-rakshabandhan-lokbhavan",
-    kicker: "सामाजिक",
-    title: "राज्यपालांचे\nरक्षाबंधन",
-    place: "मुंबई",
-    date: "२६ ऑगस्ट २०२६",
-    hue: { base: "#8A4C7A", deep: "#5E3151", wash: "#F5ECF3" },
-  },
+  // Empty: every article in `src/data/articles.ts` now points at the released
+  // poster that shipped with it (`public/posters/<slug>.jpg` / `.png`), so
+  // there is no typographic stand-in left to generate. Add an entry here only
+  // for an article that arrives without artwork of its own.
 ];
 
 const FONT_STACK =

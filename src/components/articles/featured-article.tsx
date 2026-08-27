@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowLeft, FileText, MapPin, Star } from "lucide-react";
+import { ArrowLeft, FileDown, FileText, MapPin, Star } from "lucide-react";
 import { motion, useReducedMotion } from "motion/react";
 import { cn } from "@/lib/cn";
 import { formatMarathiDate } from "@/lib/date";
@@ -9,6 +9,12 @@ import { HighlightedText } from "@/components/search/highlighted-text";
 import { PosterImage } from "@/components/articles/poster-image";
 import { Badge } from "@/components/ui/primitives";
 import type { Article } from "@/types/article";
+
+/** The PDF and DOCX links flanking the lead story's primary action. */
+const FILE_LINK =
+  "inline-flex min-h-11 items-center gap-2 rounded-xl border border-line " +
+  "bg-card px-4 text-[0.9375rem] font-medium text-ink-soft transition-colors " +
+  "hover:border-line-strong hover:text-ink";
 
 /**
  * The lead story.
@@ -107,10 +113,22 @@ export function FeaturedArticle({
               target="_blank"
               rel="noopener noreferrer"
               aria-label={t.openPdfOf(article.title)}
-              className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-line bg-card px-4 text-[0.9375rem] font-medium text-ink-soft transition-colors hover:border-line-strong hover:text-ink"
+              className={FILE_LINK}
             >
               <FileText className="size-4" strokeWidth={2} aria-hidden="true" />
               {t.pdf}
+            </a>
+          )}
+
+          {article.articleDocxUrl && (
+            <a
+              href={article.articleDocxUrl}
+              download
+              aria-label={t.openDocxOf(article.title)}
+              className={FILE_LINK}
+            >
+              <FileDown className="size-4" strokeWidth={2} aria-hidden="true" />
+              {t.docx}
             </a>
           )}
         </div>

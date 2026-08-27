@@ -1,8 +1,8 @@
 # महाराष्ट्र एका नजरेत — Maharashtra in a Glance
 
 A Marathi-first, mobile-first prototype for reading short AI-generated summaries
-of Maharashtra development news, with the full article available as an
-externally hosted PDF.
+of Maharashtra development news, with the full article available as a PDF and as
+an editable Word document.
 
 **This is a frontend prototype.** The five articles it carries are real DGIPR
 press releases of 26 August 2026, defined locally in `src/data/articles.ts`.
@@ -27,6 +27,8 @@ Other scripts:
 | `npm run typecheck`        | `next typegen` then `tsc --noEmit`                |
 | `npm test`                 | Vitest unit tests                                 |
 | `npm run gen:posters`      | Regenerate the poster SVGs in `public/posters/`   |
+| `npm run gen:pdfs`         | Print `/print/<slug>` to `public/pdfs/` (needs `npm run dev` running) |
+| `npm run gen:docx`         | Write `public/docs/<slug>.docx` from the article data (no server needed) |
 
 ---
 
@@ -42,10 +44,16 @@ That file carries a checklist at the top. In short:
    [`scripts/generate-posters.mjs`](scripts/generate-posters.mjs); an absolute
    URL needs its host added to `images.remotePatterns` in
    [`next.config.ts`](next.config.ts). `null` renders the designed fallback.
-3. Point `articlePdfUrl` at the externally hosted full article. Prefer absolute
-   `https://` URLs — these are what get pasted into share messages. `null`
-   renders the "PDF unavailable" state.
-4. `IS_DEMO_CONTENT` is already `false`; set it back to `true` only if the feed
+3. Point `articlePdfUrl` at the full article. The shipped PDFs live in
+   `public/pdfs/<slug>.pdf` and are printed from the app's own `/print/<slug>`
+   route by `npm run gen:pdfs`. An externally hosted article can use its
+   absolute `https://` URL instead — either way share messages absolutise the
+   link. `null` renders the "PDF unavailable" state.
+4. Point `articleDocxUrl` at the editable Word version. These live in
+   `public/docs/<slug>.docx` and are laid out from the same article data by
+   [`scripts/generate-docx.mjs`](scripts/generate-docx.mjs) (`npm run gen:docx`),
+   which needs no server. `null` simply hides the DOCX link.
+5. `IS_DEMO_CONTENT` is already `false`; set it back to `true` only if the feed
    is ever repopulated with sample text, which re-shows the "sample content"
    disclosures in the header, intro strip and footer.
 

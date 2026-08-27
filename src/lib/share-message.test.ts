@@ -17,8 +17,10 @@ function article(overrides: Partial<Article> & { id: string }): Article {
     title: "पुणे मेट्रोच्या मार्गिकेस मान्यता",
     date: "2026-08-21",
     summary: "पहिला परिच्छेद.\n\nदुसरा परिच्छेद.",
+    body: "पहिला परिच्छेद.\n\nदुसरा परिच्छेद.\n\nतिसरा परिच्छेद.",
     posterImageUrl: null,
     articlePdfUrl: "/pdf/demo-01.pdf",
+    articleDocxUrl: "/docs/demo-01.docx",
     category: "पायाभूत सुविधा",
     district: "पुणे",
     source: "महासंवाद",
@@ -36,8 +38,14 @@ const B = article({
   date: "2026-08-18",
   summary: "जलसंधारणाची कामे सुरू.",
   articlePdfUrl: "https://cdn.example.com/full/a2.pdf",
+  articleDocxUrl: "https://cdn.example.com/full/a2.docx",
 });
-const NO_PDF = article({ id: "a3", title: "PDF नसलेली बातमी", articlePdfUrl: null });
+const NO_PDF = article({
+  id: "a3",
+  title: "PDF नसलेली बातमी",
+  articlePdfUrl: null,
+  articleDocxUrl: null,
+});
 
 describe("resolveAbsoluteUrl", () => {
   it("leaves absolute URLs alone", () => {
@@ -83,6 +91,20 @@ describe("buildArticleBlock", () => {
     expect(block).toContain("संपूर्ण लेख (PDF):\nhttps://example.org/pdf/demo-01.pdf");
   });
 
+  it("offers the editable DOCX under its own label", () => {
+    expect(block).toContain(
+      "संपादनयोग्य प्रत (DOCX):\nhttps://example.org/docs/demo-01.docx",
+    );
+  });
+
+  it("adds no DOCX line when the article has none", () => {
+    const withoutDocx = buildArticleBlock(
+      article({ id: "a4", articleDocxUrl: null }),
+      { origin: ORIGIN },
+    );
+    expect(withoutDocx).not.toContain("DOCX");
+  });
+
   it("says so plainly when there is no PDF", () => {
     const withoutPdf = buildArticleBlock(NO_PDF, { origin: ORIGIN });
     expect(withoutPdf).toContain("संपूर्ण लेख (PDF): सध्या उपलब्ध नाही");
@@ -116,6 +138,12 @@ describe("buildShareMessage", () => {
     const message = buildShareMessage([A, B], { origin: ORIGIN });
     expect(message).toContain("https://example.org/pdf/demo-01.pdf");
     expect(message).toContain("https://cdn.example.com/full/a2.pdf");
+  });
+
+  it("carries every selected article's DOCX link", () => {
+    const message = buildShareMessage([A, B], { origin: ORIGIN });
+    expect(message).toContain("https://example.org/docs/demo-01.docx");
+    expect(message).toContain("https://cdn.example.com/full/a2.docx");
   });
 
   it("can omit the footer credit", () => {

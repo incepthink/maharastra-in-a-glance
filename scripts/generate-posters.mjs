@@ -28,14 +28,9 @@ const postersDir = path.join(root, "public", "posters");
  * much past ~16 Devanagari characters overruns the 1200px frame.
  */
 const POSTERS = [
-  {
-    slug: "msme-samanjasya-karar-chakan-bhosari",
-    kicker: "उद्योग",
-    title: "एमएसएमईंतून\n२,३२० कोटींची\nगुंतवणूक",
-    place: "मुंबई",
-    date: "२६ ऑगस्ट २०२६",
-    hue: { base: "#A1802C", deep: "#6E561A", wash: "#F7F0DD" },
-  },
+  // `msme-samanjasya-karar-chakan-bhosari` is not listed: the released DGIPR
+  // poster for that article ships as `public/posters/<slug>.jpg`, so there is
+  // no typographic stand-in to generate.
   {
     slug: "digital-arrest-cyber-jagruti-1930",
     kicker: "गृह व सुरक्षा",
